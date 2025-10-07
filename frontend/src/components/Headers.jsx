@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import "boxicons/css/boxicons.min.css";
 
 const Headers = () => {
@@ -24,19 +25,20 @@ const Headers = () => {
 
     <a href="#" className="text-base tracking-wider transition-colors
     hover:text-gray-300 z-50">
-        Documentación
+        ¿Ayuda de IA?
     </a>
     <a href="#" className="text-base tracking-wider transition-colors
     hover:text-gray-300 z-50">
-        Recursos
+        Contactos
     </a>
     </nav>
 
-    <button className=" md:block bg-[#a7a7a7] text-black py-3 px-8
-    rounded-full border-none font-medium transition-all
-    duration-500 hover:bg-[#e99b63] hover:text-white z-50">
+      <Link
+        to="/login"
+        className="md:block bg-[#a7a7a7] text-black py-3 px-8 rounded-full border-none font-medium transition-all duration-500 hover:bg-[#e99b63] hover:text-white z-50"
+      >
         Registrarse
-    </button>
+      </Link>
 
     {/* Menu icono para dispositivos moviles */}
     <button onClick={toggleMobileMenu} className="md:hidden text-3xl p-2 z-50">

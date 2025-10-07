@@ -15,18 +15,18 @@ const Hero = () => {
                         shadow-[0_0_15px_rgba(255,255,255,0.4)] rounded-full p-[2px]">
           <div className="bg-black rounded-full flex items-center justify-center px-5 py-2">
             <i className='bx bxs-diamond mr-2 text-[#e99b63]'></i>
-            <span className="text-sm text-white">Introducción</span>
+            <span className="text-sm text-white">¡Comienza ya!</span>
           </div>
         </div>
 
         {/* Título principal */}
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-wider mt-8">
-          EMAIL FOR <br /> DEVELOPERS
+          ORIENTACIÓN VOCACIONAL<br /> PARA TODOS
         </h1>
 
         {/* Descripción */}
         <p className="text-base sm:text-lg tracking-wider text-gray-400 mt-4 max-w-md">
-          La mejor plataforma para gestionar y organizar tus correos electrónicos.
+          La mejor plataforma web para la orientación vocacional integrada con ayuda de la inteligencia artificial.
         </p>
       </div>
 

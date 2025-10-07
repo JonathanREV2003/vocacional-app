@@ -1,20 +1,17 @@
-import Headers from './components/Headers'
-import Hero from "./components/Hero"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Main from './pages/main';
 import './App.css'
 
 export default function App() {
   return (
+  <Router>
     <main>
-      <img className="absolute top-0 right-0 
-      opacity-60 -z-10" src= "/gradient.png" alt="Gradient-img" />
-      
-      <div className="h-0 w-[40rem] absolute top-[20%] 
-      right-[-5%] shadow-[0_0_900px_20px_#e99b63] -rotate-[30deg] -z-10">
-      </div>
-
-      <Headers />
-      <Hero />
-
+      <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/login" element={<Login />} />
+      </Routes>
     </main>
+  </Router>
   )
 }
