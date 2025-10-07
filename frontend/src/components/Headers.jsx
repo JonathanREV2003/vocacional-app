@@ -18,16 +18,16 @@ const Headers = () => {
 
     {/* Navegación paginas */}
     <nav className="hidden md:flex items-center gap-12">
-    <a href="#" className="text-base tracking-wider transition-colors
+    <a href="#sobre-nosotros" className="text-base tracking-wider transition-colors
     hover:text-gray-300 z-50">
         Sobre nosotros
     </a>
 
-    <a href="#" className="text-base tracking-wider transition-colors
+    <a href="#ayuda-ia" className="text-base tracking-wider transition-colors
     hover:text-gray-300 z-50">
         ¿Ayuda de IA?
     </a>
-    <a href="#" className="text-base tracking-wider transition-colors
+    <a href="#contactos" className="text-base tracking-wider transition-colors
     hover:text-gray-300 z-50">
         Contactos
     </a>
@@ -48,16 +48,16 @@ const Headers = () => {
     <div id="mobileMenu" className="hidden fixed top-16 bottom-0 right-0 left-0 p-5 md:hidden z-40 bg-black
     bg-opacity-70 backdrop-blur-md">
         <nav className="flex flex-col items-center gap-6">
-            <a href="#" className="text-base tracking-wider transition-colors
+            <a href="#sobre-nosotros" className="text-base tracking-wider transition-colors
                 hover:text-gray-300 z-50">
                 Sobre nosotros
             </a>
 
-            <a href="#" className="text-base tracking-wider transition-colors
+            <a href="#ayuda-ia" className="text-base tracking-wider transition-colors
                 hover:text-gray-300 z-50">
                 Documentación
             </a>
-            <a href="#" className="text-base tracking-wider transition-colors
+            <a href="#contactos" className="text-base tracking-wider transition-colors
                 hover:text-gray-300 z-50">
                 Recursos
             </a>

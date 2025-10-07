@@ -1,7 +1,7 @@
 import DefaultFont from '../components/defaultFont';
 import Headers from '../components/Headers';
 import Hero from '../components/Hero';
-
+import Footer from '../components/Footer';
 
 export default function Main() {
   return (
@@ -9,6 +9,7 @@ export default function Main() {
       <DefaultFont />
       <Headers />
       <Hero />
+      <Footer />
     </div>
   );
 }
