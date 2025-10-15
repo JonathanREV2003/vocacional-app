@@ -1,0 +1,9 @@
+CREATE DATABASE vocacional_db
+
+CREATE TABLE usuario (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(100) NOT NULL,
+    rol VARCHAR(25) NOT NULL
+);
