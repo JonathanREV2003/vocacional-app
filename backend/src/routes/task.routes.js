@@ -1,24 +1,15 @@
 const { Router } = require('express');
-const pool = require('../models/postgres');
+const { getAllLogin, postLogin, deleteLogin, putLogin } = require('../controllers/task.controllers');
+
 
 const router = Router();
 
-router.get('/login', async (req, res) => {
-  const result = await pool.query('SELECT NOW()')
-  console.log(result);
-  res.json('executed')
-});
+router.get('/loginn', getAllLogin)
 
-router.post('/login', (req, res) => {
-  res.send('post login route');
-});
+router.post('/loginn', postLogin)
 
-router.delete('/login', (req, res) => {
-  res.send('delete login route');
-});
+router.delete('/loginn/:id', deleteLogin)
 
-router.put('/login', (req, res) => {
-  res.send('put login route');
-});
+router.put('/loginn/:id', putLogin)
 
 module.exports = router;

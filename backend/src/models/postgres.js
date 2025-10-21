@@ -1,11 +1,13 @@
 const e = require('express');
 const {Pool} = require('pg');
+const {db} = require('../config/config');
+
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    password: 'jony123',
-    port: 5432,
-    database: 'vocacional_db'
+    user: db.user,
+    host: db.host,
+    password: db.password,
+    port: db.port,
+    database: db.database
 });
 
 module.exports = pool;
