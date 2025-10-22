@@ -1,15 +1,14 @@
-const { Router } = require('express');
-const { getAllLogin, postLogin, deleteLogin, putLogin } = require('../controllers/task.controllers');
-
+import { Router } from 'express';
+import { getAllLogin, postLogin, deleteLogin, putLogin } from '../controllers/task.controllers.js';
 
 const router = Router();
 
-router.get('/loginn', getAllLogin)
+router.get('/loginn', getAllLogin);
 
-router.post('/loginn', postLogin)
+router.post('/loginn', postLogin);
 
-router.delete('/loginn/:id', deleteLogin)
+router.delete('/loginn/:id', deleteLogin);
 
-router.put('/loginn/:id', putLogin)
+router.put('/loginn/:id', putLogin);
 
-module.exports = router;
+export default router;

@@ -1,10 +1,9 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const { createUser, findUserByEmail } = require('../models/user.model.js');
-const dotenv = require('dotenv');
-dotenv.config();
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import { createUser, findUserByEmail } from '../models/user.model.js';
+import 'dotenv/config';
 
-const register = async (req, res) => {
+export const register = async (req, res) => {
   try {
     const { nombre, email, password } = req.body;
     if (!nombre || !email || !password) {
@@ -23,7 +22,7 @@ const register = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -44,5 +43,3 @@ const login = async (req, res) => {
     res.status(500).json({ message: 'Error en el login', error: error.message });
   }
 };
-
-module.exports = { register, login };

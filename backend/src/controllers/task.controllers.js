@@ -1,6 +1,6 @@
-const pool = require('../models/postgres');
+import pool from '../models/postgres.js';
 
-const getAllLogin = async (req, res) => {
+export const getAllLogin = async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM usuario');
     res.json(result.rows);
@@ -9,13 +9,13 @@ const getAllLogin = async (req, res) => {
   }
 };
 
-const postLogin = async (req, res) => {
+export const postLogin = async (req, res) => {
   const { nombre, email, password_hash, rol } = req.body;
   try {
     const result = await pool.query('INSERT INTO usuario (nombre, email, password_hash, rol) VALUES ($1, $2, $3, $4) RETURNING *',
     [nombre, email, password_hash, rol]);
     console.log(result);
-    
+
     res.json(result.rows[0]);
 
   } catch (error) {
@@ -23,7 +23,7 @@ const postLogin = async (req, res) => {
   }
 };
 
-const deleteLogin = async (req, res) => {
+export const deleteLogin = async (req, res) => {
   const { id } = req.params; // borrar por ID
   try {
     const result = await pool.query('DELETE FROM usuario WHERE id = $1 RETURNING *', [id]);
@@ -36,9 +36,9 @@ const deleteLogin = async (req, res) => {
   }
 };
 
-const putLogin = async (req, res) => {
+export const putLogin = async (req, res) => {
   const { id } = req.params; // actualizar por ID
-  const { nombre, email, password_hash, rol } = req.body; 
+  const { nombre, email, password_hash, rol } = req.body;
   try {
     const result = await pool.query(
       'UPDATE usuario SET nombre = $1, email = $2, password_hash = $3, rol = $4 WHERE id = $5 RETURNING *',
@@ -51,11 +51,4 @@ const putLogin = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
-
-module.exports = {
-  getAllLogin,
-  postLogin,
-  deleteLogin,
-  putLogin
 };
