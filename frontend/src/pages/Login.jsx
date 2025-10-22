@@ -1,22 +1,160 @@
 import DefaultFont from '../components/defaultFont';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { FaUser, FaLock } from 'react-icons/fa';
+import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 export default function Login() {
   const [isRegister, setIsRegister] = useState(false);
+  const [nombre, setNombre] = useState(''); 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (isRegister) {
-      console.log('Registrando:', username, password, confirmPassword);
-      // lógica de registro
+      // Validar contraseñas
+      if (password !== confirmPassword) {
+        toast.error('Las contraseñas no coinciden', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:4000/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nombre,
+            email: username,
+            password,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          toast.success('Registro exitoso', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          console.log('Usuario registrado:', data);
+          setIsRegister(false); // Cambia a login
+          setNombre('');
+          setUsername('');
+          setPassword('');
+          setConfirmPassword('');
+        } else {
+          toast.error(data.message || 'Error al registrar usuario', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
+      } catch (error) {
+        console.error('Error al registrar:', error);
+        toast.error('Ocurrió un error al conectarse con el servidor', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
     } else {
-      console.log('Login:', username, password);
-      // lógica de login
+    try {
+      const response = await fetch('http://localhost:4000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: username,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(data.message || 'Inicio de sesión exitoso', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        console.log('Usuario autenticado:', data);
+
+        // Guardar token según "Recuérdame"
+        if (rememberMe) {
+          localStorage.setItem('token', data.token);
+        } else {
+          sessionStorage.setItem('token', data.token);
+        }
+
+        // Redirigir al Dashboard
+        navigate('/dashboard');
+      } else {
+        toast.error(data.message || 'Credenciales inválidas', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      toast.error('No se pudo conectar con el servidor', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
+  }
   };
 
   return (
@@ -31,11 +169,26 @@ export default function Login() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Usuario */}
+          {/* Campo Nombre solo en registro */}
+          {isRegister && (
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Nombre de usuario"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                className="w-full pl-10 p-2 rounded-lg bg-white/20 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white/40"
+                required
+              />
+              <FaUser className="absolute left-3 top-2.5 text-white/70" />
+            </div>
+          )}
+
+          {/* Usuario / Correo */}
           <div className="relative">
             <input
-              type="text"
-              placeholder="Usuario"
+              type="email"
+              placeholder="Correo electrónico"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full pl-10 p-2 rounded-lg bg-white/20 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white/40"
@@ -47,28 +200,42 @@ export default function Login() {
           {/* Contraseña */}
           <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-10 p-2 rounded-lg bg-white/20 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white/40"
+              className="w-full pl-10 pr-10 p-2 rounded-lg bg-white/20 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white/40"
               required
             />
             <FaLock className="absolute left-3 top-2.5 text-white/70" />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-2.5 text-white/70 hover:text-white"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
           {/* Confirmar contraseña solo si es registro */}
           {isRegister && (
             <div className="relative">
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirmar contraseña"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full pl-10 p-2 rounded-lg bg-white/20 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white/40"
+                className="w-full pl-10 pr-10 p-2 rounded-lg bg-white/20 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white/40"
                 required
               />
               <FaLock className="absolute left-3 top-2.5 text-white/70" />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-2.5 text-white/70 hover:text-white"
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
           )}
 
@@ -76,11 +243,16 @@ export default function Login() {
           {!isRegister && (
             <div className="flex justify-between text-sm text-white/80">
               <label className="flex items-center">
-                <input type="checkbox" className="mr-2 accent-white" /> Recuérdame.
+                <input
+                  type="checkbox"
+                  className="mr-2 accent-white"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                /> Recuérdame.
               </label>
 
               <a href="#" className="hover:underline">
-                 ¿Olvidaste tu contraseña?
+                ¿Olvidaste tu contraseña?
               </a>
             </div>
           )}
