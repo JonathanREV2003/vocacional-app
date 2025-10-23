@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { FiMenu, FiX, FiSearch, FiHome, FiClipboard, FiBarChart2, FiSettings, FiLogOut, FiUser } from 'react-icons/fi';
 import Spline from '@splinetool/react-spline';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  
+  const { user, logout } = useAuth();
+
   // Datos de ejemplo del usuario
-  const userData = {
+  const userData = user || {
     name: 'Usuario Demo',
     email: 'usuario@ejemplo.com',
     avatar: 'https://ui-avatars.com/api/?name=Usuario+Demo&background=e99b63&color=fff&size=128'
@@ -88,7 +90,10 @@ export default function Dashboard() {
 
         {/* Botón de cerrar sesión */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-800">
-          <button className="flex items-center w-full px-4 py-3 text-red-400 hover:bg-red-900/20 rounded-lg transition-colors duration-200">
+          <button 
+            onClick={logout}
+            className="flex items-center w-full px-4 py-3 text-red-400 hover:bg-red-900/20 rounded-lg transition-colors duration-200"
+          >
             <FiLogOut size={20} className="mr-3" />
             <span className="font-medium">Cerrar Sesión</span>
           </button>
@@ -255,4 +260,3 @@ export default function Dashboard() {
     </div>
   );
 } 
-

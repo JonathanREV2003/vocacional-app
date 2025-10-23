@@ -2,6 +2,7 @@ import DefaultFont from '../components/defaultFont';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useAuth } from '../hooks/useAuth';
 import { toast } from 'react-toastify';
 
 export default function Login() {
@@ -14,6 +15,7 @@ export default function Login() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
+  const { login } = useAuth();
 
 
   const handleSubmit = async (e) => {
@@ -121,11 +123,7 @@ export default function Login() {
         console.log('Usuario autenticado:', data);
 
         // Guardar token según "Recuérdame"
-        if (rememberMe) {
-          localStorage.setItem('token', data.token);
-        } else {
-          sessionStorage.setItem('token', data.token);
-        }
+        login(data, rememberMe);
 
         // Redirigir al Dashboard
         navigate('/dashboard');
