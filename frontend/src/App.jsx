@@ -5,18 +5,20 @@ import Login from './pages/Login';
 import Main from './pages/Main';
 import Dashboard from './pages/Dashboard';
 import Test from './pages/Test';
+import Chatbot from './pages/Chatbot';
 import './App.css'
 
 export default function App() {
   return (
   <Router>
     <main>
-      <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/test" element={<Test />} />
-      </Routes>
+       <Routes>
+           <Route path="/" element={<Main />} />
+           <Route path="/login" element={<Login />} />
+           <Route path="/dashboard" element={<Dashboard />} />
+           <Route path="/test" element={<Test />} />
+           <Route path="/chatbot" element={<Chatbot />} />
+       </Routes>
     </main>
     <ToastContainer
       position="top-right"

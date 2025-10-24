@@ -3,10 +3,8 @@ import { interviewChat, jobOpportunities } from '../controllers/ia.controllers.j
 
 const router = express.Router();
 
-// Ruta para chatbot de entrevistas
 router.post('/interview/chat', interviewChat);
 
-// Ruta para oportunidades laborales
-router.get('/users/:userId/job-opportunities', jobOpportunities);
+router.post('/job-opportunities', jobOpportunities);
 
 export default router;

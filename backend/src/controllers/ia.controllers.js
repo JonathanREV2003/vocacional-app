@@ -1,24 +1,17 @@
-import { interviewChatbot, jobOpportunitiesBot } from '../services/ia.js';
-import { getTopCareers } from '../models/test.model.js';
-
 // Controlador para chatbot de entrevistas
 export const interviewChat = async (req, res) => {
   try {
-    const { userId, message } = req.body;
+    const { careerName, userMessage } = req.body;
 
-    if (!userId || !message) {
-      return res.status(400).json({ message: 'ID de usuario y mensaje requeridos' });
+    if (!careerName || !userMessage) {
+      return res.status(400).json({ message: 'careerName y userMessage son requeridos' });
     }
 
-    // Obtener top 3 carreras del usuario
-    const topCareers = await getTopCareers(userId);
-
-    if (topCareers.length === 0) {
-      return res.status(404).json({ message: 'No se encontraron carreras para este usuario' });
-    }
+    // Construimos topCareers simulado de un solo ítem
+    const topCareers = [{ name: careerName }];
 
     // Generar respuesta del chatbot
-    const response = await interviewChatbot(topCareers, message);
+    const response = await interviewChatbot(topCareers, userMessage);
 
     res.json({ response });
   } catch (error) {
@@ -29,21 +22,13 @@ export const interviewChat = async (req, res) => {
 // Controlador para bot de oportunidades laborales
 export const jobOpportunities = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { topCareers, userMessage } = req.body;
 
-    if (!userId) {
-      return res.status(400).json({ message: 'ID de usuario requerido' });
+    if (!topCareers || topCareers.length === 0) {
+      return res.status(400).json({ message: 'Se requiere un arreglo de topCareers' });
     }
 
-    // Obtener top 3 carreras del usuario
-    const topCareers = await getTopCareers(userId);
-
-    if (topCareers.length === 0) {
-      return res.status(404).json({ message: 'No se encontraron carreras para este usuario' });
-    }
-
-    // Generar información sobre oportunidades laborales
-    const opportunities = await jobOpportunitiesBot([], topCareers);
+    const opportunities = await jobOpportunitiesBot(userMessage, topCareers);
 
     res.json({ opportunities });
   } catch (error) {

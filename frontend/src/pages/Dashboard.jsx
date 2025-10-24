@@ -323,7 +323,19 @@ export default function Dashboard() {
                 <div className="text-center">
                   <FiMessageCircle size={48} className="mx-auto mb-4" />
                   <h4 className="text-lg font-semibold mb-2">Asistente Virtual</h4>
-                  <p className="text-white/90">Aquí puedes interactuar con nuestro chatbot para resolver dudas sobre tu orientación vocacional.</p>
+                  <p className="text-white/90">Aquí puedes interactuar con nuestro chatbot enfocado en tu orientación vocacional para que te ayude a saber posibles oportunidades laborales en Guatemala.</p>
+                  <br></br>
+                  {stats.testsCompleted > 0 ? (
+                    <button
+                      onClick={() => navigate('/chatbot')}
+                      className="bg-white text-[#e99b63] px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 shadow-md hover:shadow-lg inline-flex items-center"
+                    >
+                      <FiMessageCircle className="mr-2" />
+                      Comenzar chat
+                    </button>
+                  ) : (
+                    <p className="text-white/70">Complete el test para acceder al chatbot.</p>
+                  )}
                 </div>
               </div>
             </div>
