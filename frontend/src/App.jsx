@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Login from './pages/Login';
 import Main from './pages/Main';
 import Dashboard from './pages/Dashboard';
+import Test from './pages/Test';
 import './App.css'
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/test" element={<Test />} />
       </Routes>
     </main>
     <ToastContainer

@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { FiMenu, FiX, FiSearch, FiHome, FiClipboard, FiBarChart2, FiSettings, FiLogOut, FiUser } from 'react-icons/fi';
 import Spline from '@splinetool/react-spline';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { user, logout } = useAuth();
@@ -210,7 +212,10 @@ export default function Dashboard() {
                 <p className="text-white/90 mb-6">
                   Responde nuestro test vocacional y descubre las carreras que mejor se adaptan a ti
                 </p>
-                <button className="bg-white text-[#e99b63] px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 shadow-md hover:shadow-lg inline-flex items-center">
+                <button 
+                  onClick={() => navigate('/test')}
+                  className="bg-white text-[#e99b63] px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 shadow-md hover:shadow-lg inline-flex items-center"
+                >
                   <FiClipboard className="mr-2" />
                   Comenzar Test
                 </button>
