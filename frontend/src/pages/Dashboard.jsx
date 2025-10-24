@@ -1,12 +1,20 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { FiMenu, FiX, FiSearch, FiHome, FiClipboard, FiBarChart2, FiSettings, FiLogOut, FiUser } from 'react-icons/fi';
 import Spline from '@splinetool/react-spline';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('inicio');
   const { user, logout } = useAuth();
+
+  // Refs for sections
+  const inicioRef = useRef(null);
+  const hacerTestRef = useRef(null);
+  const resultadosRef = useRef(null);
 
   // Datos de ejemplo del usuario
   const userData = user || {
@@ -17,11 +25,25 @@ export default function Dashboard() {
 
   // Opciones del menú lateral
   const menuItems = [
-    { icon: FiHome, label: 'Inicio', path: '/' },
-    { icon: FiClipboard, label: 'Hacer Test', path: '/test', highlight: true },
-    { icon: FiBarChart2, label: 'Resultados', path: '/resultados' },
+    { icon: FiHome, label: 'Inicio', id: 'inicio', highlight: true },
+    { icon: FiClipboard, label: 'Hacer Test', id: 'hacerTest' },
+    { icon: FiBarChart2, label: 'Resultados', id: 'resultados' },
     { icon: FiSettings, label: 'Configuración', path: '/configuracion' },
   ];
+
+  // Función para desplazar a la sección
+  const scrollToSection = (id) => {
+    setActiveTab(id);
+    const refMap = {
+      inicio: inicioRef,
+      hacerTest: hacerTestRef,
+      resultados: resultadosRef,
+    };
+    const ref = refMap[id];
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="flex h-screen bg-black overflow-hidden grid-pattern">
@@ -32,15 +54,12 @@ export default function Dashboard() {
         transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* Header del Sidebar con Robot */}
+        {/* Header del Sidebar con gorroLogo*/}
         <div className="flex items-center justify-between p-3 border-b border-gray-800">
           <div className="flex items-center space-x-2">
-            {/* Robot 3D pequeño completo con base */}
-            <div className="w-32 h-32 flex-shrink-0 -ml-6 -my-5">
-              <Spline
-                className="w-full h-full scale-[0.35]"
-                scene="https://prod.spline.design/KFfQUE95SIab8qAr/scene.splinecode"
-              />
+            {/* GorroLogo pequeño completo con base */}
+            <div className="w-24 h-24 flex-shrink-0 -ml-6 -my-5">
+              <img src ="/public/GorroLogo.png" alt="Logo" className="w-full h-full object-contain"/>
             </div>
             <h1 className="text-base font-bold bg-gradient-to-r from-[#e99b63] to-[#ff8c42] bg-clip-text text-transparent whitespace-nowrap">
               VocacionalApp
@@ -71,20 +90,31 @@ export default function Dashboard() {
         {/* Navegación */}
         <nav className="px-4 py-2 space-y-2">
           {menuItems.map((item, index) => (
-            <a
-              key={index}
-              href={item.path}
-              className={`
-                flex items-center px-4 py-3 rounded-lg transition-colors duration-200
-                ${item.highlight 
-                  ? 'bg-gradient-to-r from-[#e99b63] to-[#ff8c42] text-white hover:shadow-[0_0_15px_rgba(233,155,99,0.5)] shadow-md' 
-                  : 'text-gray-300 hover:bg-gray-800/50'
-                }
-              `}
-            >
-              <item.icon size={20} className="mr-3" />
-              <span className="font-medium">{item.label}</span>
-            </a>
+            item.path ? (
+              <a
+                key={index}
+                href={item.path}
+                className="flex items-center px-4 py-3 rounded-lg transition-colors duration-200 text-gray-300 hover:bg-gray-800/50"
+              >
+                <item.icon size={20} className="mr-3" />
+                <span className="font-medium">{item.label}</span>
+              </a>
+            ) : (
+              <button
+                key={index}
+                onClick={() => scrollToSection(item.id)}
+                className={`
+                  flex items-center w-full px-4 py-3 rounded-lg transition-colors duration-200
+                  ${activeTab === item.id
+                    ? 'bg-gradient-to-r from-[#e99b63] to-[#ff8c42] text-white hover:shadow-[0_0_15px_rgba(233,155,99,0.5)] shadow-md'
+                    : 'text-gray-300 hover:bg-gray-800/50'
+                  }
+                `}
+              >
+                <item.icon size={20} className="mr-3" />
+                <span className="font-medium">{item.label}</span>
+              </button>
+            )
           ))}
         </nav>
 
@@ -163,8 +193,8 @@ export default function Dashboard() {
 
         {/* Área de contenido principal */}
         <main className="flex-1 overflow-y-auto p-4 lg:p-6 bg-transparent">
-          {/* Cards de estadísticas */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
+          {/* Sección Inicio - Cards de estadísticas */}
+          <div id="inicio" ref={inicioRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
             <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl shadow-xl p-6 hover:shadow-[0_0_15px_rgba(233,155,99,0.3)] transition-all">
               <div className="flex items-center justify-between">
                 <div>
@@ -203,14 +233,17 @@ export default function Dashboard() {
           </div>
 
           {/* Sección principal - Hacer el test con Robot 3D */}
-          <div className="bg-gradient-to-br from-[#656565] to-[#e99b63] rounded-xl shadow-[0_0_30px_rgba(233,155,99,0.3)] p-6 lg:p-8 mb-6 text-white relative overflow-hidden">
+          <div id="hacerTest" ref={hacerTestRef} className="bg-gradient-to-br from-[#656565] to-[#e99b63] rounded-xl shadow-[0_0_30px_rgba(233,155,99,0.3)] p-6 lg:p-8 mb-6 text-white relative overflow-hidden">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
               <div className="mb-4 lg:mb-0 lg:mr-8 text-center lg:text-left z-10 flex-1">
                 <h3 className="text-2xl lg:text-3xl font-bold mb-2">¿Listo para descubrir tu vocación?</h3>
                 <p className="text-white/90 mb-6">
                   Responde nuestro test vocacional y descubre las carreras que mejor se adaptan a ti
                 </p>
-                <button className="bg-white text-[#e99b63] px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 shadow-md hover:shadow-lg inline-flex items-center">
+                <button 
+                  onClick={() => navigate('/test')}
+                  className="bg-white text-[#e99b63] px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 shadow-md hover:shadow-lg inline-flex items-center"
+                >
                   <FiClipboard className="mr-2" />
                   Comenzar Test
                 </button>
@@ -227,7 +260,7 @@ export default function Dashboard() {
           </div>
 
           {/* Resultados recientes */}
-          <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl shadow-xl p-6">
+          <div id="resultados" ref={resultadosRef} className="bg-[#0a0a0a] border border-gray-800 rounded-xl shadow-xl p-6">
             <h3 className="text-xl font-bold text-white mb-4">Resultados Recientes</h3>
             <div className="space-y-4">
               {[
