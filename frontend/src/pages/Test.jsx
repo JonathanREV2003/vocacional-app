@@ -1,151 +1,43 @@
-import { useState } from 'react';
-import { FiCheckCircle, FiArrowLeft } from 'react-icons/fi';
+import { useState, useEffect } from 'react';
+import { FiCheckCircle, FiArrowLeft, FiLoader } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import Spline from '@splinetool/react-spline';
+import { fetchTests } from '../services/testService';
+import { calculateResults } from '../utils/testUtils';
 
 export default function Test() {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const questions = [
-    {
-      id: 1,
-      question: "¿Qué tipo de actividades disfrutas más?",
-      options: [
-        { text: "Resolver problemas matemáticos o lógicos", value: "A" },
-        { text: "Ayudar a otras personas o trabajar en equipo", value: "B" },
-        { text: "Crear o diseñar cosas nuevas", value: "C" }
-      ]
-    },
-    {
-      id: 2,
-      question: "¿Cómo te consideras cuando enfrentas un problema?",
-      options: [
-        { text: "Analítico: busco entender la causa y encontrar una solución lógica", value: "A" },
-        { text: "Práctico: actúo rápido para resolverlo", value: "B" },
-        { text: "Creativo: busco soluciones fuera de lo común", value: "C" }
-      ]
-    },
-    {
-      id: 3,
-      question: "¿Qué materia te interesa más?",
-      options: [
-        { text: "Matemática o física", value: "A" },
-        { text: "Biología o psicología", value: "B" },
-        { text: "Arte o literatura", value: "C" }
-      ]
-    },
-    {
-      id: 4,
-      question: "¿Qué ambiente de trabajo prefieres?",
-      options: [
-        { text: "Oficina o laboratorio con herramientas tecnológicas", value: "A" },
-        { text: "Espacios con interacción constante con personas", value: "B" },
-        { text: "Lugares donde pueda expresar ideas y creatividad", value: "C" }
-      ]
-    },
-    {
-      id: 5,
-      question: "¿Qué te motiva más en un proyecto?",
-      options: [
-        { text: "Lograr que todo funcione correctamente", value: "A" },
-        { text: "Ver cómo ayuda o mejora la vida de las personas", value: "B" },
-        { text: "Que sea visualmente atractivo o innovador", value: "C" }
-      ]
-    },
-    {
-      id: 6,
-      question: "¿Cómo te describirían tus amigos?",
-      options: [
-        { text: "Lógico y organizado", value: "A" },
-        { text: "Solidario y comunicativo", value: "B" },
-        { text: "Original y artístico", value: "C" }
-      ]
-    },
-    {
-      id: 7,
-      question: "¿Qué tipo de noticias o temas te llaman más la atención?",
-      options: [
-        { text: "Ciencia, tecnología e innovación", value: "A" },
-        { text: "Sociedad, salud y bienestar", value: "B" },
-        { text: "Arte, diseño y cultura", value: "C" }
-      ]
-    },
-    {
-      id: 8,
-      question: "Si pudieras elegir un proyecto para liderar, ¿cuál sería?",
-      options: [
-        { text: "Construir una app o sistema útil", value: "A" },
-        { text: "Coordinar una campaña solidaria", value: "B" },
-        { text: "Dirigir una producción audiovisual o artística", value: "C" }
-      ]
-    },
-    {
-      id: 9,
-      question: "¿Qué disfrutas más al trabajar?",
-      options: [
-        { text: "Resolver desafíos técnicos", value: "A" },
-        { text: "Colaborar y comunicarme con los demás", value: "B" },
-        { text: "Imaginar y crear conceptos nuevos", value: "C" }
-      ]
-    },
-    {
-      id: 10,
-      question: "¿Qué tipo de tareas prefieres?",
-      options: [
-        { text: "Aquellas que requieren precisión y detalle", value: "A" },
-        { text: "Aquellas que implican contacto con personas", value: "B" },
-        { text: "Aquellas que permitan improvisar o innovar", value: "C" }
-      ]
-    },
-    {
-      id: 11,
-      question: "Si tienes que presentar un trabajo, ¿cómo prefieres hacerlo?",
-      options: [
-        { text: "Con datos y gráficos claros", value: "A" },
-        { text: "Explicándolo con entusiasmo y ejemplos", value: "B" },
-        { text: "A través de una presentación visual o creativa", value: "C" }
-      ]
-    },
-    {
-      id: 12,
-      question: "¿Qué tipo de herramientas te gusta usar más?",
-      options: [
-        { text: "Computadoras, software o aparatos electrónicos", value: "A" },
-        { text: "Libros, materiales educativos o de comunicación", value: "B" },
-        { text: "Cámaras, instrumentos o materiales artísticos", value: "C" }
-      ]
-    },
-    {
-      id: 13,
-      question: "¿Qué opinas sobre trabajar en grupo?",
-      options: [
-        { text: "Me gusta si todos tienen roles definidos", value: "A" },
-        { text: "Me encanta interactuar y compartir ideas", value: "B" },
-        { text: "Prefiero trabajar solo cuando necesito concentrarme", value: "C" }
-      ]
-    },
-    {
-      id: 14,
-      question: "¿Qué te resulta más satisfactorio?",
-      options: [
-        { text: "Resolver un problema complejo", value: "A" },
-        { text: "Ayudar a alguien o enseñar algo nuevo", value: "B" },
-        { text: "Ver que algo que creé causa impacto visual o emocional", value: "C" }
-      ]
-    },
-    {
-      id: 15,
-      question: "¿Qué te gustaría aprender más en el futuro?",
-      options: [
-        { text: "Programación, ingeniería o finanzas", value: "A" },
-        { text: "Psicología, pedagogía o medicina", value: "B" },
-        { text: "Diseño, música o comunicación audiovisual", value: "C" }
-      ]
-    }
-  ];
+  useEffect(() => {
+    const loadTests = async () => {
+      try {
+        const tests = await fetchTests();
+        if (tests.length > 0) {
+          const test = tests[0]; // Take the first test
+          const formattedQuestions = test.questions.map(q => ({
+            id: q.id,
+            question: q.question_text,
+            options: q.options.map(opt => ({
+              text: opt.option_text,
+              value: opt.option_value
+            }))
+          }));
+          setQuestions(formattedQuestions);
+        }
+      } catch (err) {
+        setError('Error al cargar las preguntas. Por favor, intenta de nuevo.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadTests();
+  }, []);
 
   const handleAnswer = (value) => {
     const newAnswers = { ...answers, [currentQuestion]: value };
@@ -164,35 +56,9 @@ export default function Test() {
     }
   };
 
-  const calculateResults = () => {
-    const counts = { A: 0, B: 0, C: 0 };
-    Object.values(answers).forEach(answer => {
-      counts[answer]++;
-    });
-
-    if (counts.A >= counts.B && counts.A >= counts.C) {
-      return {
-        type: "Carreras Técnicas y Científicas",
-        description: "Te inclinas hacia áreas de ingeniería, tecnología, matemáticas y ciencias exactas.",
-        careers: ["Ingeniería en Sistemas", "Ingeniería Civil", "Física", "Matemáticas Aplicadas", "Ciencias de la Computación"]
-      };
-    } else if (counts.B >= counts.C) {
-      return {
-        type: "Carreras Sociales y Humanísticas",
-        description: "Te atraen las áreas relacionadas con el servicio, la salud y el bienestar de las personas.",
-        careers: ["Psicología", "Medicina", "Trabajo Social", "Pedagogía", "Enfermería"]
-      };
-    } else {
-      return {
-        type: "Carreras Creativas y Artísticas",
-        description: "Tu perfil se orienta hacia el diseño, las artes y la comunicación visual.",
-        careers: ["Diseño Gráfico", "Arquitectura", "Comunicación Audiovisual", "Bellas Artes", "Diseño de Moda"]
-      };
-    }
-  };
 
   if (showResults) {
-    const result = calculateResults();
+    const result = calculateResults(answers);
     return (
       <div className="min-h-screen bg-black grid-pattern flex flex-col p-4">
         {/* Header con logo y robot */}
@@ -245,6 +111,41 @@ export default function Test() {
             Volver al Dashboard
           </button>
         </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black grid-pattern flex items-center justify-center">
+        <div className="text-center">
+          <FiLoader className="animate-spin text-4xl text-[#e99b63] mx-auto mb-4" />
+          <p className="text-white">Cargando preguntas...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-black grid-pattern flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-400 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-[#e99b63] text-white px-4 py-2 rounded"
+          >
+            Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (questions.length === 0) {
+    return (
+      <div className="min-h-screen bg-black grid-pattern flex items-center justify-center">
+        <p className="text-white">No hay preguntas disponibles.</p>
       </div>
     );
   }
