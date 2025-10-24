@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Spline from '@splinetool/react-spline';
 import { fetchTests } from '../services/testService';
 import { calculateResults } from '../utils/testUtils';
+import { saveResult } from '../services/resultService';
 
 export default function Test() {
   const navigate = useNavigate();
@@ -13,13 +14,14 @@ export default function Test() {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [resultSaved, setResultSaved] = useState(false);
 
   useEffect(() => {
     const loadTests = async () => {
       try {
         const tests = await fetchTests();
         if (tests.length > 0) {
-          const test = tests[0]; // Take the first test
+          const test = tests[0]; // Tomar el primer test disponible 1
           const formattedQuestions = test.questions.map(q => ({
             id: q.id,
             question: q.question_text,
@@ -59,6 +61,10 @@ export default function Test() {
 
   if (showResults) {
     const result = calculateResults(answers);
+    if (!resultSaved) {
+      saveResult(result);
+      setResultSaved(true);
+    }
     return (
       <div className="min-h-screen bg-black grid-pattern flex flex-col p-4">
         {/* Header con logo y robot */}
@@ -96,9 +102,12 @@ export default function Test() {
           <div className="mb-8">
             <h4 className="text-xl font-semibold text-white mb-4">Carreras recomendadas:</h4>
             <div className="space-y-3">
-              {result.careers.map((career, index) => (
+              {result.topCareers.map((career, index) => (
                 <div key={index} className="bg-black/50 border border-gray-800 rounded-lg p-4 hover:border-[#e99b63]/50 transition-all">
-                  <p className="text-white font-medium">{career}</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-white font-medium">{career.name}</p>
+                    <span className="text-sm font-bold text-[#e99b63]">{career.percentage}%</span>
+                  </div>
                 </div>
               ))}
             </div>

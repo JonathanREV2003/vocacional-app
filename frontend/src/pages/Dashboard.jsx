@@ -1,20 +1,40 @@
-import { useState, useRef } from 'react';
-import { FiMenu, FiX, FiSearch, FiHome, FiClipboard, FiBarChart2, FiSettings, FiLogOut, FiUser } from 'react-icons/fi';
+import { useState, useRef, useEffect } from 'react';
+import { FiMenu, FiX, FiSearch, FiHome, FiClipboard, FiBarChart2, FiSettings, FiLogOut, FiUser, FiMessageCircle } from 'react-icons/fi';
 import Spline from '@splinetool/react-spline';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { computeDashboardStats } from '../utils/dashboardUtils';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('inicio');
+  const [stats, setStats] = useState({
+    testsCompleted: 0,
+    areasOfInterest: 0,
+    compatibility: { type: 'N/A', percentage: 0 },
+    recentResults: []
+  });
   const { user, logout } = useAuth();
+
+  useEffect(() => {
+    const updateStats = () => {
+      const newStats = computeDashboardStats();
+      setStats(newStats);
+    };
+    updateStats();
+    // Optionally, listen for storage changes if needed
+    const handleStorageChange = () => updateStats();
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   // Refs for sections
   const inicioRef = useRef(null);
   const hacerTestRef = useRef(null);
   const resultadosRef = useRef(null);
+  const chatBotRef = useRef(null);
 
   // Datos de ejemplo del usuario
   const userData = user || {
@@ -28,6 +48,7 @@ export default function Dashboard() {
     { icon: FiHome, label: 'Inicio', id: 'inicio', highlight: true },
     { icon: FiClipboard, label: 'Hacer Test', id: 'hacerTest' },
     { icon: FiBarChart2, label: 'Resultados', id: 'resultados' },
+    { icon: FiMessageCircle, label: 'ChatBot', id: 'chatBot' },
     { icon: FiSettings, label: 'Configuración', path: '/configuracion' },
   ];
 
@@ -38,6 +59,7 @@ export default function Dashboard() {
       inicio: inicioRef,
       hacerTest: hacerTestRef,
       resultados: resultadosRef,
+      chatBot: chatBotRef,
     };
     const ref = refMap[id];
     if (ref && ref.current) {
@@ -59,7 +81,7 @@ export default function Dashboard() {
           <div className="flex items-center space-x-2">
             {/* GorroLogo pequeño completo con base */}
             <div className="w-24 h-24 flex-shrink-0 -ml-6 -my-5">
-              <img src ="/public/GorroLogo.png" alt="Logo" className="w-full h-full object-contain"/>
+              <img src="/GorroLogo.png" alt="Logo" className="w-full h-full object-contain"/>
             </div>
             <h1 className="text-base font-bold bg-gradient-to-r from-[#e99b63] to-[#ff8c42] bg-clip-text text-transparent whitespace-nowrap">
               VocacionalApp
@@ -120,8 +142,11 @@ export default function Dashboard() {
 
         {/* Botón de cerrar sesión */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-800">
-          <button 
-            onClick={logout}
+          <button
+            onClick={() => {
+              logout();
+              navigate('/');
+            }}
             className="flex items-center w-full px-4 py-3 text-red-400 hover:bg-red-900/20 rounded-lg transition-colors duration-200"
           >
             <FiLogOut size={20} className="mr-3" />
@@ -199,7 +224,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-sm font-medium">Tests Completados</p>
-                  <p className="text-3xl font-bold text-white mt-2">3</p>
+                  <p className="text-3xl font-bold text-white mt-2">{stats.testsCompleted}</p>
                 </div>
                 <div className="bg-gradient-to-br from-[#e99b63] to-[#ff8c42] p-3 rounded-lg">
                   <FiClipboard size={24} className="text-white" />
@@ -211,7 +236,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-sm font-medium">Áreas de Interés</p>
-                  <p className="text-3xl font-bold text-white mt-2">5</p>
+                  <p className="text-3xl font-bold text-white mt-2">{stats.areasOfInterest}</p>
                 </div>
                 <div className="bg-gradient-to-br from-[#656565] to-[#e99b63] p-3 rounded-lg">
                   <FiBarChart2 size={24} className="text-white" />
@@ -223,7 +248,8 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-sm font-medium">Compatibilidad</p>
-                  <p className="text-3xl font-bold text-white mt-2">85%</p>
+                  <p className="text-lg font-bold text-white mt-1">{stats.compatibility?.type || 'N/A'}</p>
+                  <p className="text-2xl font-bold text-[#e99b63] mt-1">{stats.compatibility.percentage}%</p>
                 </div>
                 <div className="bg-gradient-to-br from-green-600 to-green-400 p-3 rounded-lg">
                   <FiUser size={24} className="text-white" />
@@ -263,29 +289,43 @@ export default function Dashboard() {
           <div id="resultados" ref={resultadosRef} className="bg-[#0a0a0a] border border-gray-800 rounded-xl shadow-xl p-6">
             <h3 className="text-xl font-bold text-white mb-4">Resultados Recientes</h3>
             <div className="space-y-4">
-              {[
-                { career: 'Ingeniería en Sistemas', compatibility: 92, date: '15 Oct 2025' },
-                { career: 'Ciencias de la Computación', compatibility: 88, date: '12 Oct 2025' },
-                { career: 'Desarrollo de Software', compatibility: 85, date: '10 Oct 2025' },
-              ].map((result, index) => (
-                <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-black/50 border border-gray-800 rounded-lg hover:bg-gray-800/30 hover:border-[#e99b63]/30 transition-all">
-                  <div className="mb-2 sm:mb-0">
-                    <p className="font-semibold text-white">{result.career}</p>
-                    <p className="text-sm text-gray-400">{result.date}</p>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-full sm:w-32 bg-black rounded-full h-2 mr-3 border border-gray-700">
-                      <div 
-                        className="bg-gradient-to-r from-[#656565] to-[#e99b63] h-2 rounded-full transition-all duration-500"
-                        style={{ width: `${result.compatibility}%` }}
-                      ></div>
+              {stats.recentResults.length > 0 ? (
+                stats.recentResults.map((result, index) => (
+                  <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-black/50 border border-gray-800 rounded-lg hover:bg-gray-800/30 hover:border-[#e99b63]/30 transition-all">
+                    <div className="mb-2 sm:mb-0">
+                      <p className="font-semibold text-white">{result.career}</p>
+                      <p className="text-sm text-gray-400">{result.date}</p>
                     </div>
-                    <span className="text-sm font-bold text-[#e99b63] min-w-[3rem] text-right">
-                      {result.compatibility}%
-                    </span>
+                    <div className="flex items-center">
+                      <div className="w-full sm:w-32 bg-black rounded-full h-2 mr-3 border border-gray-700">
+                        <div
+                          className="bg-gradient-to-r from-[#656565] to-[#e99b63] h-2 rounded-full transition-all duration-500"
+                          style={{ width: `${result.compatibility}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-sm font-bold text-[#e99b63] min-w-[3rem] text-right">
+                        {result.compatibility}%
+                      </span>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <p className="text-gray-400">No hay resultados recientes.</p>
+              )}
+            </div>
+          </div>
+
+          {/* ChatBot section */}
+          <div id="chatBot" ref={chatBotRef} className="bg-[#0a0a0a] border border-gray-800 rounded-xl shadow-xl p-6">
+            <h3 className="text-xl font-bold text-white mb-4">ChatBot</h3>
+            <div className="bg-gradient-to-br from-[#656565] to-[#e99b63] rounded-xl p-6 text-white">
+              <div className="flex items-center justify-center">
+                <div className="text-center">
+                  <FiMessageCircle size={48} className="mx-auto mb-4" />
+                  <h4 className="text-lg font-semibold mb-2">Asistente Virtual</h4>
+                  <p className="text-white/90">Aquí puedes interactuar con nuestro chatbot para resolver dudas sobre tu orientación vocacional.</p>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </main>
