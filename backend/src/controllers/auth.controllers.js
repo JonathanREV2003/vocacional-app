@@ -16,7 +16,7 @@ export const register = async (req, res) => {
     }
 
     const newUser = await createUser(nombre, email, password);
-    res.status(201).json({ message: 'Usuario registrado exitosamente', user: newUser });
+    res.status(201).json({ message: 'Usuario registrado exitosamente', user: { id: newUser.id, nombre: newUser.nombre, email: newUser.email, rol: newUser.rol } });
   } catch (error) {
     res.status(500).json({ message: 'Error al registrar usuario', error: error.message });
   }
@@ -38,7 +38,7 @@ export const login = async (req, res) => {
       { expiresIn: '2h' }
     );
 
-    res.json({ message: 'Inicio de sesión exitoso', token, user: { id: user.id, nombre: user.nombre, rol: user.rol } });
+    res.json({ message: 'Inicio de sesión exitoso', token, user: { id: user.id, nombre: user.nombre, email: user.email, rol: user.rol } });
   } catch (error) {
     res.status(500).json({ message: 'Error en el login', error: error.message });
   }

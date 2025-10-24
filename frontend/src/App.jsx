@@ -6,6 +6,7 @@ import Main from './pages/Main';
 import Dashboard from './pages/Dashboard';
 import Test from './pages/Test';
 import Chatbot from './pages/Chatbot';
+import InterviewChat from './pages/InterviewChat';
 import './App.css'
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
            <Route path="/dashboard" element={<Dashboard />} />
            <Route path="/test" element={<Test />} />
            <Route path="/chatbot" element={<Chatbot />} />
+           <Route path="/interview-chat" element={<InterviewChat />} />
        </Routes>
     </main>
     <ToastContainer

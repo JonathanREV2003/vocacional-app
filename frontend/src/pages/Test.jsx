@@ -85,7 +85,7 @@ export default function Test() {
           </div>
         </div>
 
-        <div className="max-w-3xl w-full mx-auto bg-[#0a0a0a] border border-gray-800 rounded-2xl shadow-2xl p-8 animate-fade-in">
+        <div className="max-w-3xl w-full mx-auto bg-[#0a0a0a] border border-gray-800 rounded-2xl shadow-2xl p-4 sm:p-8 animate-fade-in">
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#656565] to-[#e99b63] rounded-full mb-4">
               <FiCheckCircle size={40} className="text-white" />
@@ -99,13 +99,13 @@ export default function Test() {
             <p className="text-white/90 text-lg">{result.description}</p>
           </div>
 
-          <div className="mb-8">
-            <h4 className="text-xl font-semibold text-white mb-4">Carreras recomendadas:</h4>
+          <div className="mb-6 sm:mb-8">
+            <h4 className="text-lg sm:text-xl font-semibold text-white mb-4">Carreras recomendadas:</h4>
             <div className="space-y-3">
               {result.topCareers.map((career, index) => (
-                <div key={index} className="bg-black/50 border border-gray-800 rounded-lg p-4 hover:border-[#e99b63]/50 transition-all">
+                <div key={index} className="bg-black/50 border border-gray-800 rounded-lg p-3 sm:p-4 hover:border-[#e99b63]/50 transition-all">
                   <div className="flex justify-between items-center">
-                    <p className="text-white font-medium">{career.name}</p>
+                    <p className="text-white font-medium text-sm sm:text-base">{career.name}</p>
                     <span className="text-sm font-bold text-[#e99b63]">{career.percentage}%</span>
                   </div>
                 </div>
@@ -115,7 +115,7 @@ export default function Test() {
 
           <button
             onClick={() => navigate('/dashboard')}
-            className="w-full bg-gradient-to-r from-[#656565] to-[#e99b63] text-white py-4 rounded-lg font-semibold hover:shadow-[0_0_20px_rgba(233,155,99,0.5)] transition-all duration-200"
+            className="w-full bg-gradient-to-r from-[#656565] to-[#e99b63] text-white py-3 sm:py-4 rounded-lg font-semibold hover:shadow-[0_0_20px_rgba(233,155,99,0.5)] transition-all duration-200 text-sm sm:text-base"
           >
             Volver al Dashboard
           </button>
@@ -126,10 +126,10 @@ export default function Test() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black grid-pattern flex items-center justify-center">
+      <div className="min-h-screen bg-black grid-pattern flex items-center justify-center p-4">
         <div className="text-center">
-          <FiLoader className="animate-spin text-4xl text-[#e99b63] mx-auto mb-4" />
-          <p className="text-white">Cargando preguntas...</p>
+          <FiLoader className="animate-spin text-3xl sm:text-4xl text-[#e99b63] mx-auto mb-4" />
+          <p className="text-white text-sm sm:text-base">Cargando preguntas...</p>
         </div>
       </div>
     );
@@ -137,12 +137,12 @@ export default function Test() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-black grid-pattern flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-400 mb-4">{error}</p>
+      <div className="min-h-screen bg-black grid-pattern flex items-center justify-center p-4">
+        <div className="text-center max-w-md">
+          <p className="text-red-400 mb-4 text-sm sm:text-base">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="bg-[#e99b63] text-white px-4 py-2 rounded"
+            className="bg-[#e99b63] text-white px-4 py-2 rounded text-sm sm:text-base"
           >
             Reintentar
           </button>
@@ -153,8 +153,8 @@ export default function Test() {
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen bg-black grid-pattern flex items-center justify-center">
-        <p className="text-white">No hay preguntas disponibles.</p>
+      <div className="min-h-screen bg-black grid-pattern flex items-center justify-center p-4">
+        <p className="text-white text-sm sm:text-base">No hay preguntas disponibles.</p>
       </div>
     );
   }
@@ -167,7 +167,7 @@ export default function Test() {
       <div className="w-full flex justify-center py-4 mb-4">
         <div className="flex items-center space-x-2">
           {/* Robot 3D pequeño */}
-          <div className="w-20 h-16 flex-shrink-0 overflow-hidden -ml-2">
+          <div className="w-16 h-12 sm:w-20 sm:h-16 flex-shrink-0 overflow-hidden -ml-2">
             <div className="w-64 h-64 -mt-24 -ml-24 scale-50">
               <Spline
                 className="w-full h-full"
@@ -175,7 +175,7 @@ export default function Test() {
               />
             </div>
           </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-[#e99b63] to-[#ff8c42] bg-clip-text text-transparent whitespace-nowrap">
+          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#e99b63] to-[#ff8c42] bg-clip-text text-transparent whitespace-nowrap">
             VocacionalApp
           </h1>
         </div>
@@ -183,22 +183,22 @@ export default function Test() {
 
       <div className="max-w-4xl w-full mx-auto flex-1 flex flex-col">
         {/* Header con progreso */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
             <button
               onClick={() => navigate('/dashboard')}
-              className="flex items-center text-gray-400 hover:text-white transition-colors"
+              className="flex items-center text-gray-400 hover:text-white transition-colors text-sm sm:text-base"
             >
-              <FiArrowLeft className="mr-2" />
+              <FiArrowLeft className="mr-1 sm:mr-2 w-4 h-4 sm:w-5 sm:h-5" />
               Volver
             </button>
-            <span className="text-white font-semibold">
+            <span className="text-white font-semibold text-sm sm:text-base">
               Pregunta {currentQuestion + 1} de {questions.length}
             </span>
           </div>
           
           {/* Barra de progreso */}
-          <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
+          <div className="w-full bg-gray-800 rounded-full h-2 sm:h-3 overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-[#656565] to-[#e99b63] transition-all duration-500 rounded-full"
               style={{ width: `${progress}%` }}
@@ -207,25 +207,25 @@ export default function Test() {
         </div>
 
         {/* Pregunta actual */}
-        <div className="bg-[#0a0a0a] border border-gray-800 rounded-2xl shadow-2xl p-8 animate-fade-in">
-          <h2 className="text-2xl lg:text-3xl font-bold text-white mb-8">
+        <div className="bg-[#0a0a0a] border border-gray-800 rounded-2xl shadow-2xl p-4 sm:p-8 animate-fade-in">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-6 sm:mb-8">
             {questions[currentQuestion].question}
           </h2>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {questions[currentQuestion].options.map((option, index) => (
               <button
                 key={index}
                 onClick={() => handleAnswer(option.value)}
-                className="w-full text-left p-6 bg-black/50 border border-gray-800 rounded-xl hover:border-[#e99b63] hover:bg-gray-800/30 transition-all duration-200 group"
+                className="w-full text-left p-4 sm:p-6 bg-black/50 border border-gray-800 rounded-xl hover:border-[#e99b63] hover:bg-gray-800/30 transition-all duration-200 group"
               >
                 <div className="flex items-center">
-                  <div className="w-10 h-10 flex-shrink-0 rounded-full border-2 border-gray-700 group-hover:border-[#e99b63] flex items-center justify-center mr-4 transition-colors">
-                    <span className="text-gray-400 group-hover:text-[#e99b63] font-semibold transition-colors">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 rounded-full border-2 border-gray-700 group-hover:border-[#e99b63] flex items-center justify-center mr-3 sm:mr-4 transition-colors">
+                    <span className="text-gray-400 group-hover:text-[#e99b63] font-semibold transition-colors text-sm sm:text-base">
                       {String.fromCharCode(65 + index)}
                     </span>
                   </div>
-                  <span className="text-white text-lg">{option.text}</span>
+                  <span className="text-white text-base sm:text-lg">{option.text}</span>
                 </div>
               </button>
             ))}

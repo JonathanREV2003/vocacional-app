@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { FiMenu, FiX, FiSearch, FiHome, FiClipboard, FiBarChart2, FiSettings, FiLogOut, FiUser, FiMessageCircle } from 'react-icons/fi';
+import { FiMenu, FiX, FiSearch, FiHome, FiClipboard, FiBarChart2, FiSettings, FiLogOut, FiUser, FiMessageCircle, FiPlay } from 'react-icons/fi';
 import Spline from '@splinetool/react-spline';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +24,7 @@ export default function Dashboard() {
       setStats(newStats);
     };
     updateStats();
-    // Optionally, listen for storage changes if needed
+    // local storage
     const handleStorageChange = () => updateStats();
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
@@ -38,9 +38,9 @@ export default function Dashboard() {
 
   // Datos de ejemplo del usuario
   const userData = user || {
-    name: 'Usuario Demo',
+    nombre: 'Usuario Demo',
     email: 'usuario@ejemplo.com',
-    avatar: 'https://ui-avatars.com/api/?name=Usuario+Demo&background=e99b63&color=fff&size=128'
+    avatar: 'https://robohash.org/128x128?set=set2' 
   };
 
   // Opciones del menú lateral
@@ -178,12 +178,6 @@ export default function Dashboard() {
 
             {/* Logo móvil con Robot */}
             <div className="lg:hidden flex items-center space-x-1">
-              <div className="w-10 h-10 -ml-1">
-                <Spline
-                  className="w-full h-full scale-150"
-                  scene="https://prod.spline.design/KFfQUE95SIab8qAr/scene.splinecode"
-                />
-              </div>
               <h1 className="text-base font-bold bg-gradient-to-r from-[#e99b63] to-[#ff8c42] bg-clip-text text-transparent whitespace-nowrap">
                 VocacionalApp
               </h1>
@@ -191,7 +185,7 @@ export default function Dashboard() {
 
             {/* Título para desktop */}
             <div className="hidden lg:block">
-              <h2 className="text-2xl font-bold text-white">Dashboard</h2>
+              <h2 className="text-2xl font-bold text-white">Consola</h2>
               <p className="text-sm text-gray-400">Bienvenido a tu panel de control</p>
             </div>
 
@@ -199,15 +193,15 @@ export default function Dashboard() {
             <div className="flex items-center space-x-3 lg:space-x-4">
               {/* Nombre (solo desktop) */}
               <div className="hidden lg:block text-right">
-                <p className="text-sm font-semibold text-white">{userData.name}</p>
+                <p className="text-sm font-semibold text-white">{userData.nombre}</p>
                 <p className="text-xs text-gray-400">{userData.email}</p>
               </div>
               
               {/* Avatar */}
               <div className="relative">
-                <img 
-                  src={userData.avatar} 
-                  alt={userData.name}
+                <img
+                  src={userData.avatar}
+                  alt={userData.nombre}
                   className="w-10 h-10 lg:w-12 lg:h-12 rounded-full ring-2 ring-[#e99b63] ring-offset-2 ring-offset-black cursor-pointer hover:ring-[#ff8c42] transition-all"
                 />
                 <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-black"></div>
@@ -292,20 +286,29 @@ export default function Dashboard() {
               {stats.recentResults.length > 0 ? (
                 stats.recentResults.map((result, index) => (
                   <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-black/50 border border-gray-800 rounded-lg hover:bg-gray-800/30 hover:border-[#e99b63]/30 transition-all">
-                    <div className="mb-2 sm:mb-0">
+                    <div className="mb-2 sm:mb-0 flex-1">
                       <p className="font-semibold text-white">{result.career}</p>
                       <p className="text-sm text-gray-400">{result.date}</p>
                     </div>
-                    <div className="flex items-center">
-                      <div className="w-full sm:w-32 bg-black rounded-full h-2 mr-3 border border-gray-700">
-                        <div
-                          className="bg-gradient-to-r from-[#656565] to-[#e99b63] h-2 rounded-full transition-all duration-500"
-                          style={{ width: `${result.compatibility}%` }}
-                        ></div>
+                    <div className="flex items-center space-x-3">
+                      <div className="flex items-center">
+                        <div className="w-full sm:w-32 bg-black rounded-full h-2 mr-3 border border-gray-700">
+                          <div
+                            className="bg-gradient-to-r from-[#656565] to-[#e99b63] h-2 rounded-full transition-all duration-500"
+                            style={{ width: `${result.compatibility}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-sm font-bold text-[#e99b63] min-w-[3rem] text-right">
+                          {result.compatibility}%
+                        </span>
                       </div>
-                      <span className="text-sm font-bold text-[#e99b63] min-w-[3rem] text-right">
-                        {result.compatibility}%
-                      </span>
+                      <button
+                        onClick={() => navigate(`/interview-chat?career=${encodeURIComponent(result.career)}`)}
+                        className="bg-gradient-to-r from-[#656565] to-[#e99b63] text-white px-3 py-2 rounded-lg font-semibold hover:shadow-[0_0_15px_rgba(233,155,99,0.5)] transition-all duration-200 flex items-center"
+                      >
+                        <FiPlay className="mr-1" />
+                        Entrevista simulada
+                      </button>
                     </div>
                   </div>
                 ))

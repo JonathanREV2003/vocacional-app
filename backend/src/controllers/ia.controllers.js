@@ -1,3 +1,5 @@
+import { interviewChatbot, jobOpportunitiesBot } from '../services/ia.js';
+
 // Controlador para chatbot de entrevistas
 export const interviewChat = async (req, res) => {
   try {
@@ -7,14 +9,13 @@ export const interviewChat = async (req, res) => {
       return res.status(400).json({ message: 'careerName y userMessage son requeridos' });
     }
 
-    // Construimos topCareers simulado de un solo ítem
-    const topCareers = [{ name: careerName }];
-
+    console.log('Calling interviewChatbot with:', { careerName, userMessage });
     // Generar respuesta del chatbot
-    const response = await interviewChatbot(topCareers, userMessage);
+    const response = await interviewChatbot(careerName, userMessage);
 
-    res.json({ response });
+    res.json({ message: response });
   } catch (error) {
+    console.error('Error in interviewChat:', error);
     res.status(500).json({ message: 'Error en el chatbot', error: error.message });
   }
 };
@@ -28,10 +29,12 @@ export const jobOpportunities = async (req, res) => {
       return res.status(400).json({ message: 'Se requiere un arreglo de topCareers' });
     }
 
-    const opportunities = await jobOpportunitiesBot(userMessage, topCareers);
+    console.log('Calling jobOpportunitiesBot with:', { topCareers, userMessage });
+    const opportunities = await jobOpportunitiesBot(topCareers, userMessage);
 
-    res.json({ opportunities });
+    res.json({ message: opportunities });
   } catch (error) {
+    console.error('Error in jobOpportunities:', error);
     res.status(500).json({ message: 'Error obteniendo oportunidades laborales', error: error.message });
   }
 };
