@@ -1,0 +1,318 @@
+{
+	"info": {
+		"_postman_id": "11a916f7-b03d-40cc-8d64-3681b67bebac",
+		"name": "DESARROLLO_WEB",
+		"description": "postmanTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47770581",
+		"_collection_link": "https://jeliasv2-1735890.postman.co/workspace/68e2a751-8df9-42d1-8a25-41565914b6c9/collection/47770581-11a916f7-b03d-40cc-8d64-3681b67bebac?action=share&source=collection_link&creator=47770581"
+	},
+	"item": [
+		{
+			"name": "obtenerTodosLosLogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Debe devolver estado 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Debe devolver una lista (array)\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"    pm.expect(json).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cada elemento debe tener un id y un email\", function () {\r",
+							"    const data = pm.response.json();\r",
+							"    if (data.length > 0) {\r",
+							"        pm.expect(data[0]).to.have.property('id');\r",
+							"        pm.expect(data[0]).to.have.property('email');\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/tests/api/tasks/loginn",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"tasks",
+						"loginn"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostLogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Debe devolver estado 200 o 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 404]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Si actualiza, debe contener mensaje de confirmación\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"    if (pm.response.code === 200) {\r",
+							"        pm.expect(json).to.have.any.keys('message', 'updated', 'success');\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"nombre\": \"Juan Pérez Cordon\",\r\n        \"email\": \"juan.5perez@example.com\",\r\n        \"password_hash\": \"hashed_password_example\",\r\n        \"rol\": \"admin\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/tests/api/tasks/loginn/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"tasks",
+						"loginn",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidacionLogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 🧪 Test 1: Verificar que el estado sea 200\r",
+							"pm.test(\"Debe responder con código 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// 🧪 Test 2: Validar que la respuesta sea JSON\r",
+							"pm.test(\"La respuesta debe estar en formato JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"// 🧪 Test 3: Verificar que contenga las claves esperadas\r",
+							"pm.test(\"La respuesta debe contener message, token y user\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.all.keys(\"message\", \"token\", \"user\");\r",
+							"});\r",
+							"\r",
+							"// 🧪 Test 4: Validar que el token sea una cadena JWT válida\r",
+							"pm.test(\"El token debe tener formato JWT\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.token).to.be.a(\"string\");\r",
+							"    // Verifica que tenga las tres partes del JWT\r",
+							"    pm.expect(jsonData.token.split(\".\")).to.have.lengthOf(3);\r",
+							"});\r",
+							"\r",
+							"// 🧪 Test 5: Verificar que los datos del usuario sean correctos\r",
+							"pm.test(\"El objeto user debe tener id, nombre y rol\", function () {\r",
+							"    const user = pm.response.json().user;\r",
+							"    pm.expect(user).to.have.property(\"id\");\r",
+							"    pm.expect(user).to.have.property(\"nombre\");\r",
+							"    pm.expect(user).to.have.property(\"rol\");\r",
+							"    pm.expect(user.rol).to.be.oneOf([\"usuario\", \"admin\"]); \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"carlos@gmail.com\",\r\n  \"password\": \"carlos123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/tests/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "respuestasDelTets",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 🧪 Test 1: Verificar que el estado sea 200\r",
+							"pm.test(\"Debe responder con código 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// 🧪 Test 2: Validar que la respuesta sea JSON\r",
+							"pm.test(\"La respuesta debe estar en formato JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Tiempo de respuesta menor a 800ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/tests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"tests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PtuebasDeLaIA",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 🧪 Test 1: Verificar que el estado sea 200\r",
+							"pm.test(\"Debe responder con código 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// 🧪 Test 2: Validar que la respuesta sea JSON\r",
+							"pm.test(\"La respuesta debe estar en formato JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"// 🧪 Test 3: Validar que contenga el campo 'message'\r",
+							"pm.test(\"La respuesta debe contener el campo 'message'\", function () {\r",
+							"    const data = pm.response.json();\r",
+							"    pm.expect(data).to.have.property(\"message\");\r",
+							"    pm.expect(data.message).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// 🧪 Test 4: Validar que el mensaje no esté vacío\r",
+							"pm.test(\"El mensaje de IA no debe estar vacío\", function () {\r",
+							"    const msg = pm.response.json().message;\r",
+							"    pm.expect(msg.trim().length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"// 🧪 Test 5: Validar tiempo de respuesta razonable (<1500ms)\r",
+							"pm.test(\"Tiempo de respuesta menor a 1800ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1800);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"careerName\": \"Ingeniería en Sistemas\",\r\n  \"userMessage\": \"Tengo experiencia básica en programación y me gusta resolver problemas.\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/ia/interview/chat",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"ia",
+						"interview",
+						"chat"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
