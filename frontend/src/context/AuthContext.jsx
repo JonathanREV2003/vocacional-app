@@ -27,6 +27,15 @@ export const AuthProvider = ({ children }) => {
     storage.setItem('user', JSON.stringify(data.user));
   };
 
+  // Actualizar datos del usuario en estado y en el storage correspondiente
+  const updateUser = (newUser) => {
+    setUser(newUser);
+    // Determinar dónde está guardado el token/usuario (localStorage tiene prioridad)
+    const storage = localStorage.getItem('token') ? localStorage : sessionStorage;
+    if (newUser) storage.setItem('user', JSON.stringify(newUser));
+    else storage.removeItem('user');
+  };
+
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -35,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

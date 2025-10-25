@@ -9,6 +9,23 @@
   }
 }
 
+/* Tema claro/oscuro mínimo: se activa con el atributo data-theme en el elemento root */
+:root[data-theme="dark"] {
+  --bg-color: #000000;
+  --text-color: #ffffff;
+}
+
+:root[data-theme="light"] {
+  --bg-color: #f7f7f8;
+  --text-color: #0a0a0a;
+}
+
+/* Aplicar variables a body (fallback a clases de Tailwind) */
+body {
+  background-color: var(--bg-color, #000);
+  color: var(--text-color, #fff);
+}
+
 /* Patrón de líneas de grid para el fondo */
 .grid-pattern {
   background-image: 

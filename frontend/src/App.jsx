@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Login from './pages/Login';
 import Main from './pages/Main';
 import Dashboard from './pages/Dashboard';
+import Configuracion from './pages/Configuracion';
 import Test from './pages/Test';
 import Chatbot from './pages/Chatbot';
 import InterviewChat from './pages/InterviewChat';
@@ -17,6 +18,7 @@ export default function App() {
            <Route path="/" element={<Main />} />
            <Route path="/login" element={<Login />} />
            <Route path="/dashboard" element={<Dashboard />} />
+           <Route path="/configuracion" element={<Configuracion />} />
            <Route path="/test" element={<Test />} />
            <Route path="/chatbot" element={<Chatbot />} />
            <Route path="/interview-chat" element={<InterviewChat />} />
