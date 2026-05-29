@@ -163,7 +163,7 @@ export default function Login() {
       {/* Contenedor transparente */}
       <div className="z-10 bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-xl w-[320px] transition-all duration-500">
         <h2 className="text-3xl text-white font-bold text-center mb-6">
-          {isRegister ? 'Registro' : 'Loginn'}
+          {isRegister ? 'Registro' : 'Login'}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
