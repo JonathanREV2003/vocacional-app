@@ -19,5 +19,17 @@ app.use('/api/auth', authRoutes);
 app.use('/api', testRoutes);
 app.use('/api/ia', iaRoutes);
 
-app.listen(4000)
-console.log('Servidor corriendo en el puerto 4000');
+const PORT = process.env.PORT || 5000;
+
+const server = app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
+
+server.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error(`Error: el puerto ${PORT} ya está en uso. Cierra el proceso que lo ocupa o cambia PORT en .env.`);
+  } else {
+    console.error('Error al iniciar el servidor:', error);
+  }
+  process.exit(1);
+});

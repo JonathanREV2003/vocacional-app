@@ -42,7 +42,7 @@ export default function Chatbot() {
     setUsedQuestions(prev => new Set([...prev, question]));
 
     try {
-      const response = await fetch('http://localhost:4000/api/ia/job-opportunities', {
+      const response = await fetch('http://localhost:5000/api/ia/job-opportunities', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
