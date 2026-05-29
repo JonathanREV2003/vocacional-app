@@ -12,7 +12,12 @@ const app = express();
 
 app.use(morgan('dev')); //peticiones por consola
 app.use(express.json()); //formato json
-app.use(cors()); // habilitar CORS
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    process.env.FRONTEND_URL
+  ].filter(Boolean)
+}));
 
 app.use('/api/tasks', taskRoutes);
 app.use('/api/auth', authRoutes);
