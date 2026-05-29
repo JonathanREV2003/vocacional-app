@@ -1,0 +1,104 @@
+FASE 1 – REQUERIMIENTOS Y DISEÑO
+Proyecto: Vocational AI Guidance App
+
+1. Descripción del sistema
+El proyecto “Vocational AI Guidance App” consiste en una aplicación web desarrollada para ayudar a estudiantes y jóvenes a elegir una carrera universitaria o técnica de manera más informada y personalizada.
+La plataforma utiliza Inteligencia Artificial mediante GPT-4o mini y Gemini para analizar habilidades, intereses y preferencias del usuario a través de cuestionarios interactivos y entrevistas simuladas. Con base en esta información, el sistema genera perfiles vocacionales y recomendaciones de carreras acordes al perfil del estudiante.
+Además, el sistema muestra tendencias y oportunidades laborales futuras para ayudar a los usuarios a conocer las profesiones con mayor demanda en el mercado actual.
+El proyecto será desarrollado utilizando React y Tailwind CSS para el frontend, Node.js con Express.js para el backend y PostgreSQL como base de datos principal.
+
+2. Requerimientos Funcionales
+RF-01 Registro de usuarios
+El sistema deberá permitir el registro de usuarios mediante correo electrónico y contraseña.
+
+RF-02 Inicio de sesión
+El sistema deberá permitir que los usuarios autenticados puedan iniciar sesión en la plataforma.
+
+RF-03 Cuestionario vocacional interactivo
+El sistema deberá mostrar un cuestionario interactivo para recopilar información sobre habilidades e intereses del usuario.
+
+RF-04 Generación de perfil vocacional
+El sistema deberá utilizar GPT-4o mini para analizar las respuestas del usuario y generar un perfil vocacional personalizado.
+
+RF-05 Recomendación de carreras
+El sistema deberá recomendar carreras universitarias o técnicas según el perfil generado por la Inteligencia Artificial.
+
+RF-06 Visualización de tendencias laborales
+El sistema deberá mostrar tendencias y oportunidades laborales futuras utilizando Gemini.
+
+3. Requerimientos No Funcionales
+RNF-01 Rendimiento
+El sistema deberá responder las solicitudes del usuario en un tiempo máximo de 5 segundos en condiciones normales.
+
+RNF-02 Compatibilidad
+La aplicación deberá funcionar correctamente en computadoras, tablets y dispositivos móviles.
+
+RNF-03 Seguridad
+El sistema deberá proteger la información de los usuarios mediante autenticación segura y almacenamiento protegido de datos.
+
+4. Historias de Usuario
+HU-01 Registro de usuario
+Historia
+Como estudiante, quiero registrarme en la plataforma para guardar mis resultados y recomendaciones vocacionales.
+Criterios de aceptación
+El usuario puede ingresar nombre, correo y contraseña.
+El sistema valida los campos obligatorios.
+La información se almacena correctamente en la base de datos.
+
+HU-02 Inicio de sesión
+Historia
+Como usuario registrado, quiero iniciar sesión para acceder a mis resultados vocacionales.
+Criterios de aceptación
+El usuario puede ingresar correo y contraseña.
+El sistema valida credenciales.
+El usuario es redirigido al dashboard principal.
+
+HU-03 Completar cuestionario vocacional
+Historia
+Como estudiante, quiero responder un cuestionario interactivo para recibir recomendaciones de carreras según mis habilidades e intereses.
+Criterios de aceptación
+El sistema muestra las preguntas correctamente.
+El usuario puede navegar entre preguntas.
+Las respuestas se almacenan correctamente.
+El sistema genera resultados al finalizar.
+
+HU-04 Generar perfil vocacional
+Historia
+Como estudiante, quiero que la IA analice mis respuestas para obtener un perfil vocacional personalizado.
+Criterios de aceptación
+El sistema envía respuestas a GPT-4o mini.
+La IA genera un perfil vocacional.
+El perfil se almacena en la base de datos.
+
+HU-05 Recomendación de carreras
+Historia
+Como estudiante, quiero recibir recomendaciones de carreras para conocer opciones acordes a mis habilidades e intereses.
+Criterios de aceptación
+El sistema muestra mínimo 3 carreras recomendadas.
+Las recomendaciones son generadas mediante IA.
+Cada carrera incluye una descripción breve.
+
+HU-06 Mostrar tendencias laborales
+Historia
+Como usuario, quiero visualizar tendencias laborales futuras para conocer carreras con mayor demanda.
+Criterios de aceptación
+El sistema muestra oportunidades laborales futuras.
+La información es generada mediante Gemini.
+El usuario puede visualizar tendencias y recomendaciones.
+
+HU-07 Visualizar dashboard personal
+Historia
+Como usuario, quiero visualizar un dashboard personal para consultar mis resultados y recomendaciones vocacionales.
+Criterios de aceptación
+El dashboard carga correctamente.
+El usuario puede visualizar resultados y gráficas.
+El diseño es responsivo.
+
+HU-08 Diseño responsivo
+Historia
+Como usuario móvil, quiero acceder desde cualquier dispositivo para utilizar cómodamente la plataforma.
+Criterios de aceptación
+El sistema funciona correctamente en móviles.
+El diseño se adapta a diferentes tamaños de pantalla.
+No existen errores visuales importantes.
+
