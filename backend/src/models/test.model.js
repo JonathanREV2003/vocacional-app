@@ -15,7 +15,7 @@ export const getTestWithQuestions = async () => {
 
   const { rows } = await pool.query(query);
 
-  // Convertimos en formato JSON estructurado
+  // Convertimos en formato JSON estructurado cambio
   const tests = [];
   let currentTest = null;
   let currentQuestion = null;
