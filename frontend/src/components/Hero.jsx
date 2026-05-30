@@ -23,7 +23,7 @@ const Hero = () => {
 
           {/* Título principal */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-wider mt-8">
-            ORIENTACIÓN VOCACIONAL<br /> PARA TODOS
+            ORIENTACIÓN VOCACIONAL<br /> PARA TODOS  Y CON AYUDA DE LA IA
           </h1>
 
           {/* Descripción */}
